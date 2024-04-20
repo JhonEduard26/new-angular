@@ -1,0 +1,6 @@
+<div class="d-flex justify-content-center">
+  <img class="card-img-top" [src]="src" [alt]="altText" width="200" height="200" (load)="onLoad()"
+    [class.d-none]="!hasLoaded" />
+
+  <shared-loader *ngIf="!hasLoaded"></shared-loader>
+</div>
