@@ -1,5 +1,5 @@
-import { Component, inject } from '@angular/core';
-import { GifsService } from '../../../gifs/services/gifs.service';
+import { Component, inject } from '@angular/core'
+import { GifsService } from '../../../gifs/services/gifs.service'
 
 @Component({
   selector: 'shared-sidebar',
@@ -7,9 +7,9 @@ import { GifsService } from '../../../gifs/services/gifs.service';
   styleUrl: './sidebar.component.css'
 })
 export class SidebarComponent {
-  private gifsService = inject(GifsService)
+  private readonly gifsService = inject(GifsService)
 
-  get tags() {
+  get tags (): string[] {
     return this.gifsService.tagsHistory
   }
 }
