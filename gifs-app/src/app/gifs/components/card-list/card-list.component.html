@@ -1,8 +1,9 @@
 <div class="row">
-  <div class="col-md-3 col-sm-6">
-    <div class="card mb-2 text-center bg-dark" *ngFor="let gif of gifs">
-      <!-- TODO: crear imagen -->
-      <img [src]="gif.images.original_mp4" [alt]="gif.alt_text">
+  <div class="col-md-3 col-sm-6" *ngFor="let gif of gifs">
+    <div class="card mb-2 text-center bg-dark">
+      <div>
+        <img [src]="gif.images.original.webp" alt="{{gif.title}}" class="card-img-top" />
+      </div>
       <div class="card-body text-white">
         <p class="card-text">{{gif.title}}</p>
       </div>

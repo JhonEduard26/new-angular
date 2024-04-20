@@ -1,5 +1,4 @@
-import { Component, inject } from '@angular/core'
-import { GifsService } from '../../services/gifs.service'
+import { Component, Input } from '@angular/core'
 import { type Gif } from '../../interfaces/gifs.interfaces'
 
 @Component({
@@ -8,9 +7,5 @@ import { type Gif } from '../../interfaces/gifs.interfaces'
   styleUrl: './card-list.component.css'
 })
 export class CardListComponent {
-  private readonly gifsService = inject(GifsService)
-
-  get gifs (): Gif[] {
-    return this.gifsService.gifs
-  }
+  @Input({ required: true }) gifs: Gif[] = []
 }
