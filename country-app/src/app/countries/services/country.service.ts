@@ -36,4 +36,13 @@ export class CountryService {
       error: () => this.countries.set([])
     })
   }
+
+  searchByAlphaCode(alphaCode: string) {
+    this.http.get<CountryResponse[]>(`${this.baseUrl}/alpha/${alphaCode}`).subscribe({
+      next: (c) => {
+        this.countries.set(c);
+      },
+      error: () => this.countries.set([])
+    })
+  }
 }
