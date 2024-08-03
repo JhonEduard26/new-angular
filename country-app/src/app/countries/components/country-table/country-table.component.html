@@ -1,0 +1,28 @@
+<div class="alert alert-warning" role="alert" *ngIf="countries().length === 0; else elseBlock">
+  No hay países para mostrar
+</div>
+
+<ng-template #elseBlock>
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Capital</th>
+        <th scope="col">País</th>
+        <th scope="col">Bandera</th>
+        <th scope="col"></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let country of countries(); index as i">
+        <th scope="row">{{i + 1}}</th>
+        <td>{{ country.capital }}</td>
+        <td>{{ country.name.common }}</td>
+        <td><img [src]="country.flags.png" alt="{{ country.name }}" style="width: 50px;"></td>
+        <td>
+          <a href="#">Ver más</a>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</ng-template>

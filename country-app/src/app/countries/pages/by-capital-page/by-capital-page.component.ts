@@ -8,6 +8,7 @@ import { CountryService } from '../../services/country.service';
 })
 export class ByCapitalPageComponent {
   private countryService = inject(CountryService);
+  countries = this.countryService.countries
 
   searchByCapital(term: string): void {
     this.countryService.search(term);
