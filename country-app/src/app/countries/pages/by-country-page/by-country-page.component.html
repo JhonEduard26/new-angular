@@ -3,13 +3,13 @@
 
 <div class="row">
   <div class="col">
-     <shared-search-box placeholder="By country" (onSearch)="searchByName($event)"></shared-search-box>
+     <shared-search-box placeholder="By country" [initialValue]="initialValue" (onSearch)="searchByName($event)"></shared-search-box>
   </div>
 </div>
 
 <div class="row">
   <div class="col">
-    <countries-table [countries]="countries()"></countries-table>
+    <countries-table [countries]="countries"></countries-table>
   </div>
 </div>
 

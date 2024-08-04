@@ -1,1 +1,2 @@
-<input type="text" [placeholder]="placeholder()" class="form-control mb-4" #input (keydown.enter)="search(this.input.value)">
+<input type="text" [placeholder]="placeholder()" [value]="initialValue()" class="form-control mb-4" #input
+  (keydown.enter)="search(this.input.value)">

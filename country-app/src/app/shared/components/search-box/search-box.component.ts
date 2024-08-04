@@ -6,6 +6,7 @@ import { Component, input, output } from '@angular/core';
   styleUrl: './search-box.component.css'
 })
 export class SearchBoxComponent {
+  initialValue = input<string>();
   placeholder = input.required<string>();
   onSearch = output<string>();
 

@@ -1,8 +1,10 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable, signal } from '@angular/core';
+import { catchError, Observable, of, tap } from 'rxjs';
 
 import { CacheStore } from '../interfaces/cache-store.interface';
 import { CountryResponse } from '../interfaces';
+import { Region } from '../interfaces/region.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -10,31 +12,56 @@ import { CountryResponse } from '../interfaces';
 export class CountryService {
   private baseUrl = 'https://restcountries.com/v3.1';
   private http = inject(HttpClient);
-  countries = signal<CountryResponse[]>([]);
+
+  constructor() {
+    this.loadFromLocalStorage();
+  }
 
   public cacheStore: CacheStore = {
-    byCapital:    { term: '',   countries: [] },
-    byCountries:  { term: '',   countries: [] },
-    byRegion:     { region: '', countries: [] }
+    byCapital: { term: '', countries: [] },
+    byCountries: { term: '', countries: [] },
+    byRegion: { region: '', countries: [] }
   }
 
-  private fetchCountries(endpoint: string) {
-    this.http.get<CountryResponse[]>(`${this.baseUrl}/${endpoint}`).subscribe({
-      next: (c) => this.countries.set(c),
-      error: () => this.countries.set([])
-    })
+  private saveToLocalStorage() {
+    localStorage.setItem('cacheStore', JSON.stringify(this.cacheStore));
   }
 
-  search(term: string) {
-    this.fetchCountries(`capital/${term}`);
+  private loadFromLocalStorage() {
+    if (!localStorage.getItem('cacheStore')) return
+
+    this.cacheStore = JSON.parse(localStorage.getItem('cacheStore')!);
   }
 
-  searchByName(name: string) {
-    this.fetchCountries(`name/${name}`);
+  private fetchCountries(endpoint: string): Observable<CountryResponse[]> {
+    return this.http.get<CountryResponse[]>(`${this.baseUrl}/${endpoint}`)
+      .pipe(
+        catchError(() => of([]))
+      )
   }
 
-  searchByRegion(region: string) {
-    this.fetchCountries(`region/${region}`);
+  searchByCapital(term: string): Observable<CountryResponse[]> {
+    return this.fetchCountries(`capital/${term}`)
+      .pipe(
+        tap(countries => this.cacheStore.byCapital = { term, countries }),
+        tap(() => this.saveToLocalStorage())
+      )
+  }
+
+  searchByName(term: string) {
+    return this.fetchCountries(`name/${term}`)
+      .pipe(
+        tap(countries => this.cacheStore.byCountries = { term, countries }),
+        tap(() => this.saveToLocalStorage())
+      )
+  }
+
+  searchByRegion(region: Region) {
+    return this.fetchCountries(`region/${region}`)
+      .pipe(
+        tap(countries => this.cacheStore.byRegion = { region, countries }),
+        tap(() => this.saveToLocalStorage())
+      )
   }
 
   searchByAlphaCode(alphaCode: string) {
