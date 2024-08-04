@@ -1,5 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable, signal } from '@angular/core';
+
+import { CacheStore } from '../interfaces/cache-store.interface';
 import { CountryResponse } from '../interfaces';
 
 @Injectable({
@@ -10,39 +12,32 @@ export class CountryService {
   private http = inject(HttpClient);
   countries = signal<CountryResponse[]>([]);
 
-  search(term: string) {
-    this.http.get<CountryResponse[]>(`${this.baseUrl}/capital/${term}`).subscribe({
-      next: (c) => {
-        this.countries.set(c);
-      },
+  public cacheStore: CacheStore = {
+    byCapital:    { term: '',   countries: [] },
+    byCountries:  { term: '',   countries: [] },
+    byRegion:     { region: '', countries: [] }
+  }
+
+  private fetchCountries(endpoint: string) {
+    this.http.get<CountryResponse[]>(`${this.baseUrl}/${endpoint}`).subscribe({
+      next: (c) => this.countries.set(c),
       error: () => this.countries.set([])
     })
+  }
+
+  search(term: string) {
+    this.fetchCountries(`capital/${term}`);
   }
 
   searchByName(name: string) {
-    this.http.get<CountryResponse[]>(`${this.baseUrl}/name/${name}`).subscribe({
-      next: (c) => {
-        this.countries.set(c);
-      },
-      error: () => this.countries.set([])
-    })
+    this.fetchCountries(`name/${name}`);
   }
 
   searchByRegion(region: string) {
-    this.http.get<CountryResponse[]>(`${this.baseUrl}/region/${region}`).subscribe({
-      next: (c) => {
-        this.countries.set(c);
-      },
-      error: () => this.countries.set([])
-    })
+    this.fetchCountries(`region/${region}`);
   }
 
   searchByAlphaCode(alphaCode: string) {
-    this.http.get<CountryResponse[]>(`${this.baseUrl}/alpha/${alphaCode}`).subscribe({
-      next: (c) => {
-        this.countries.set(c);
-      },
-      error: () => this.countries.set([])
-    })
+    this.fetchCountries(`alpha/${alphaCode}`);
   }
 }
