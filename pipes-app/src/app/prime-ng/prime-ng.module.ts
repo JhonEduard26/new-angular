@@ -7,6 +7,7 @@ import { InputTextModule } from 'primeng/inputtext';
 import { MenubarModule } from 'primeng/menubar';
 import { MenuModule } from 'primeng/menu';
 import { PanelModule } from 'primeng/panel';
+import { TableModule } from 'primeng/table';
 import { ToolbarModule } from 'primeng/toolbar';
 
 
@@ -19,6 +20,7 @@ import { ToolbarModule } from 'primeng/toolbar';
     MenubarModule,
     MenuModule,
     PanelModule,
+    TableModule,
     ToolbarModule
   ]
 })
